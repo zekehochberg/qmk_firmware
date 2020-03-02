@@ -1,0 +1,2 @@
+#define LEADER_TIMEOUT 300
+#define TAPPING_TERM 200
