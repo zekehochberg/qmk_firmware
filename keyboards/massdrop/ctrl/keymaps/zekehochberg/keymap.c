@@ -32,10 +32,10 @@ enum {
 
 int cur_dance (qk_tap_dance_state_t *state);
 
-void rctrl_finished (qktap_dance_state_t *state, void *user_data);
-void rctrl_reset(qktap_dance_state_t *state, void *user_data);
-void lctrl_finished (qktap_dance_state_t *state, void *user_data);
-void lctrl_reset(qktap_dance_state_t *state, void *user_data);
+void rctrl_finished (qk_tap_dance_state_t *state, void *user_data);
+void rctrl_reset (qk_tap_dance_state_t *state, void *user_data);
+void lctrl_finished (qk_tap_dance_state_t *state, void *user_data);
+void lctrl_reset (qk_tap_dance_state_t *state, void *user_data);
 
 keymap_config_t keymap_config;
 
@@ -46,7 +46,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS,   KC_DEL,  KC_END,  KC_PGDN, \
         LT(2, KC_ESC),  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, KC_ENT, \
         KC_LSPO, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSPC,                              KC_UP, \
-        TD_CBRO, KC_LALT, KC_LGUI,                   KC_SPC,                             KC_APP,  KC_RALT, MO(1),   TD_CBRC,            KC_LEFT, KC_DOWN, KC_RGHT \
+        TD(TD_CBRO), KC_LALT, KC_LGUI,                   KC_SPC,                             KC_RGUI,  KC_RALT, MO(1),   TD(TD_CBRC),            KC_LEFT, KC_DOWN, KC_RGHT \
     ),
     [1] = LAYOUT(
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,            KC_MUTE, _______, _______, \
@@ -87,12 +87,20 @@ void matrix_scan_user(void) {
         leading = false;
         leader_end();
 
-        SEQ_ONE_KEY(KC_S) {
+        SEQ_ONE_KEY(KC_C) {
             SEND_STRING(SS_LGUI(SS_LCTL(SS_LSFT("4"))));
         }
 
         SEQ_TWO_KEYS(KC_S, KC_C) {
             SEND_STRING("create or replace transient table");
+        }
+
+        SEQ_TWO_KEYS(KC_S, KC_D) {
+            SEND_STRING("drop table if exists");
+        }
+
+        SEQ_TWO_KEYS(KC_S, KC_T) {
+            SEND_STRING("truncate table");
         }
     }
 };
@@ -132,30 +140,61 @@ static tap lctrltap_state = {
 void lctrl_finished (qk_tap_dance_state_t *state, void *user_data) {
   lctrltap_state.state = cur_dance(state);
   switch (lctrltap_state.state) {
-    case SINGLE_TAP: send_string(SS_LSFT("{"); break;
+    case SINGLE_TAP: register_code(KC_LBRC); break;
     case SINGLE_HOLD: register_code(KC_LCTRL); break;
-    case DOUBLE_TAP: register_code(KC_LCBR); break;
+    case DOUBLE_TAP: register_code(KC_LSFT); register_code(KC_LBRC); break;
     case DOUBLE_HOLD: register_code(KC_LCTRL); break;
-    case DOUBLE_SINGLE_TAP: send_string("{{");
+    case DOUBLE_SINGLE_TAP: register_code(KC_LBRC); unregister_code(KC_LBRC); register_code(KC_LBRC);
     //Last case is for fast typing. Assuming your key is `f`:
     //For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
     //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
   }
 }
 
-void x_reset (qk_tap_dance_state_t *state, void *user_data) {
-  switch (xtap_state.state) {
-    case SINGLE_TAP: unregister_code(KC_X); break;
+void lctrl_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (lctrltap_state.state) {
+    case SINGLE_TAP: unregister_code(KC_LBRC); break;
     case SINGLE_HOLD: unregister_code(KC_LCTRL); break;
-    case DOUBLE_TAP: unregister_code(KC_ESC); break;
-    case DOUBLE_HOLD: unregister_code(KC_LALT);
-    case DOUBLE_SINGLE_TAP: unregister_code(KC_X);
+    case DOUBLE_TAP: unregister_code(KC_LSFT);  unregister_code(KC_LBRC); break;
+    case DOUBLE_HOLD: unregister_code(KC_LCTRL);
+    case DOUBLE_SINGLE_TAP: unregister_code(KC_LBRC);
   }
-  xtap_state.state = 0;
+  lctrltap_state.state = 0;
+}
+
+static tap rctrltap_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
+void rctrl_finished (qk_tap_dance_state_t *state, void *user_data) {
+  rctrltap_state.state = cur_dance(state);
+  switch (rctrltap_state.state) {
+    case SINGLE_TAP: register_code(KC_RBRC); break;
+    case SINGLE_HOLD: register_code(KC_RCTRL); break;
+    case DOUBLE_TAP: register_code(KC_RSFT); register_code(KC_RBRC); break;
+    case DOUBLE_HOLD: register_code(KC_LCTRL); break;
+    case DOUBLE_SINGLE_TAP: register_code(KC_RBRC); unregister_code(KC_RBRC); register_code(KC_RBRC);
+    //Last case is for fast typing. Assuming your key is `f`:
+    //For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
+    //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
+  }
+}
+
+void rctrl_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (rctrltap_state.state) {
+    case SINGLE_TAP: unregister_code(KC_RBRC); break;
+    case SINGLE_HOLD: unregister_code(KC_RCTRL); break;
+    case DOUBLE_TAP: unregister_code(KC_RSFT);  unregister_code(KC_RBRC); break;
+    case DOUBLE_HOLD: unregister_code(KC_RCTRL);
+    case DOUBLE_SINGLE_TAP: unregister_code(KC_RBRC);
+  }
+  lctrltap_state.state = 0;
 }
 
 qk_tap_dance_action_t tap_dance_actions[] = {
-  [X_CTL]     = ACTION_TAP_DANCE_FN_ADVANCED(NULL,x_finished, x_reset)
+  [TD_CBRO]     = ACTION_TAP_DANCE_FN_ADVANCED(NULL, lctrl_finished, lctrl_reset),
+  [TD_CBRC]     = ACTION_TAP_DANCE_FN_ADVANCED(NULL, rctrl_finished, rctrl_reset)
 };
 
 #define MODS_SHIFT  (get_mods() & MOD_BIT(KC_LSHIFT) || get_mods() & MOD_BIT(KC_RSHIFT))
