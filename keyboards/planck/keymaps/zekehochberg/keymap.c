@@ -8,15 +8,8 @@
 #define KC_MCUT LGUI(KC_X)
 #define KC_MCPY LGUI(KC_C)
 #define KC_MPST LGUI(KC_V)
-#define ES_LESS_MAC KC_GRAVE
-#define ES_GRTR_MAC LSFT(KC_GRAVE)
-#define ES_BSLS_MAC ALGR(KC_6)
-#define NO_PIPE_ALT KC_GRAVE
-#define NO_BSLS_ALT KC_EQUAL
-#define LSA_T(kc) MT(MOD_LSFT | MOD_LALT, kc)
 #define KC_HESC MT(MOD_HYPR, KC_ESCAPE)
 #define KC_NVSC LT(4,KC_SCOLON)
-#define KC_ORYX WEBUSB_PAIR
 #define LWR_TAB LT(1,KC_TAB)
 #define RS_ENT LT(2,KC_ENTER)
 
@@ -72,7 +65,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_LEAD, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
     KC_HESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_NVSC, KC_QUOT,
     KC_LSPO, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_UP,   KC_RSPC,
-    TG(5), KC_LCTL, KC_LALT, KC_LGUI, LWR_TAB, KC_SPC,  KC_NO,   RS_ENT,  KC_SLSH, KC_LEFT, KC_DOWN, KC_RGHT),
+    TG(5),   KC_LCTL, KC_LALT, KC_LGUI, LWR_TAB, KC_SPC,  KC_NO,   RS_ENT,  KC_SLSH, KC_LEFT, KC_DOWN, KC_RGHT),
 
 /* Lower
  * ,-----------------------------------------------------------------------------------.
@@ -82,7 +75,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |Shift(|  Tab |  <*  |  {*  |  [*  |   (  |   )  |   <  |   >  | Enter| Vol+ |)Shift|
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Oryx | Ctrl | Alt  | GUI  |Lower*|  Backspace  |Raise*| Play | Prev | Vol- | Next |
+ * |      | Ctrl | Alt  | GUI  |Lower*|  Backspace  |Raise*| Play | Prev | Vol- | Next |
  * `-----------------------------------------------------------------------------------'
  * <,[,{* - All use tap dance. Once to open, second to close
  *
@@ -92,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRNS, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_MINS, KC_EQL,  KC_TRNS,
     TD_GVTL, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSLS,
     KC_LSPO, KC_TAB,  TD_ABRK, TD_BRC,  TD_CBRC, KC_LPRN, KC_RPRN, KC_LABK, KC_RABK, KC_ENT,  KC_VOLU, KC_RSPC,
-    KC_ORYX, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_BSPC, KC_NO,   KC_TRNS, KC_MPLY, KC_MPRV, KC_VOLD, KC_MNXT),
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_BSPC, KC_NO,   KC_TRNS, KC_MPLY, KC_MPRV, KC_VOLD, KC_MNXT),
 
 /* Raise
  * ,-----------------------------------------------------------------------------------.
@@ -107,7 +100,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * Esc* - Escape when tapped, Hyper when held
  * Lower* - Tab when tapped, lower when held
  * Raise* - Enter when tapped, raise when held
- * [ ]* - Tap Dance: open brackets when tapped once, close brackets when tapped twice
+ * - _* - Tap Dance: dash when tapped once, underscore when tapped twice
  */
 
   [_RAISE] = LAYOUT_planck_grid(
