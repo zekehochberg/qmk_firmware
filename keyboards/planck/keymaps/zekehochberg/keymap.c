@@ -15,12 +15,15 @@
 
 enum planck_keycodes {
   RGB_SLD = EZ_SAFE_RANGE,
-  TD_BRC = 0,
+  SCRSHT
+};
+
+enum planck_tap_dance_codes {
+  TD_BRC,
   TD_CBRC,
   TD_ABRK,
   TD_DSUN,
-  TD_GVTL,
-  SCRSHT
+  TD_GVTL
 };
 
 enum planck_layers {
@@ -32,8 +35,20 @@ enum planck_layers {
   _NUMPAD,
 };
 
-qk_tap_dance_action_t tap_dance_actions[] = {
+enum combos {
+  JK_BSPC,
+  KL_DEL
+};
 
+const uint16_t PROGMEM jk_combo[] = {KC_J, KC_K, COMBO_END};
+const uint16_t PROGMEM kl_combo[] = {KC_K, KC_L, COMBO_END};
+
+combo_t key_combos[COMBO_COUNT] = {
+  [JK_BSPC] = COMBO(jk_combo, KC_BSPC),
+  [KL_DEL] = COMBO(kl_combo, KC_DEL)
+};
+
+qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_BRC] = ACTION_TAP_DANCE_DOUBLE(KC_LBRC, KC_RBRC)
    ,[TD_CBRC] = ACTION_TAP_DANCE_DOUBLE(KC_LCBR, KC_RCBR)
    ,[TD_ABRK] = ACTION_TAP_DANCE_DOUBLE(KC_LABK, KC_RABK)
@@ -91,7 +106,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * |      |      |      |   +  |   _  |   {  |  }   |  F1  |  F2  |  F3  |  F4  | Bksp |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Esc* |      |ScrSht|   =  |   -  |   [  |  ]   |  F5  |  F6  |  F7  |  F8  | Enter|
+ * | Esc* | Caps |ScrSht|   =  |   -  |   [  |  ]   |  F5  |  F6  |  F7  |  F8  | Enter|
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |Shift(| Undo |  Cut | Copy | Paste|   <  |  >   |  F9  |  F10 |  F11 |  F12 |)Shift|
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -105,7 +120,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_RAISE] = LAYOUT_planck_grid(
     KC_TRNS, KC_NO,   KC_NO,   KC_PLUS, KC_UNDS, KC_LCBR, KC_RCBR, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_TRNS,
-    KC_TRNS, TD_DSUN, SCRSHT,  KC_EQL,  KC_MINS, KC_LBRC, KC_RBRC, KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_ENT,
+    KC_TRNS, KC_CAPS, SCRSHT,  KC_EQL,  KC_MINS, KC_LBRC, KC_RBRC, KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_ENT,
     KC_LSPO, KC_MUND, KC_MCUT, KC_MCPY, KC_MPST, KC_LABK, KC_RABK, KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_RSPC,
     KC_MPLY, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_DEL,  KC_NO,   KC_TRNS, KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT),
 
@@ -258,17 +273,14 @@ void rgb_matrix_indicators_user(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case SCRSHT:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LGUI(SS_LCTL(SS_LSFT("4"))));
-      } else {
-        // when keycode is released
-      }
-      break;
-
     case RGB_SLD:
       if (record->event.pressed) {
         rgblight_mode(1);
+      }
+      return false;
+    case SCRSHT:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LGUI(SS_LCTL(SS_LSFT("4"))));
       }
       return false;
   }
