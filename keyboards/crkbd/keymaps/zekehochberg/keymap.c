@@ -22,11 +22,13 @@ extern uint8_t is_master;
 #define KC_HESC MT(MOD_HYPR, KC_ESC)
 #define SCR_LFT LCTL(KC_LEFT)
 #define SCR_RT LCTL(KC_RIGHT)
-#define RSE_TAB LT(_RAISE, KC_TAB)
+#define RSE_ENT LT(_RAISE, KC_ENT)
+#define LWR_TAB LT(_LOWER, KC_TAB)
 #define KC_MUND LGUI(KC_Z)
 #define KC_MCUT LGUI(KC_X)
 #define KC_MPST LGUI(KC_V)
 #define KC_MCPY LGUI(KC_C)
+#define SFT_SPC MT(MOD_RSFT, KC_SPC)
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
@@ -64,20 +66,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LCTL,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_LEAD,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LGUI,   LOWER, SFT_ENT,     KC_SPC,  RSE_TAB,  KC_RALT 
+                                          KC_LGUI, LWR_TAB, SFT_ENT,    SFT_SPC, RSE_ENT, KC_RALT 
                                       //`--------------------------'  `--------------------------'
 
   ),
 
   [_LOWER] = LAYOUT( 
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       KC_TILD,KC_EXLM,   KC_AT, KC_HASH,  KC_DLR, KC_PERC,                      KC_CIRC, KC_AMPR, KC_ASTR, KC_MINS,  KC_EQL, KC_BSPC,
+      KC_TILD, KC_EXLM,   KC_AT, KC_HASH,  KC_DLR, KC_PERC,                      KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSPC,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_HESC,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_BSLS,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, KC_LBRC, KC_LPRN,                      KC_RPRN, KC_RBRC, _______, _______, _______, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LGUI,   LOWER, SFT_ENT,     KC_SPC, RSE_TAB, KC_RALT 
+                                          KC_LGUI, LWR_TAB, SFT_ENT,    SFT_SPC, RSE_ENT, KC_RALT 
                                       //`--------------------------'  `--------------------------'
     ),
 
@@ -89,7 +91,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LCTL, KC_MUND, KC_MCUT, KC_MCPY, KC_MPST, XXXXXXX,                      KC_UNDS, KC_PLUS, KC_LBRC, KC_RBRC, KC_BSLS, KC_TILD,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LGUI,   LOWER, SFT_ENT,     KC_SPC,   RSE_TAB, KC_RALT 
+                                          KC_LGUI, LWR_TAB, SFT_ENT,    SFT_SPC, RSE_ENT, KC_RALT 
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -101,7 +103,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       RGB_MOD, RGB_HUD, RGB_SAD, RGB_VAD, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LGUI,   LOWER, SFT_ENT,     KC_SPC, RSE_TAB, KC_RALT 
+                                          KC_LGUI, LWR_TAB, SFT_ENT,    SFT_SPC, RSE_ENT, KC_RALT 
                                       //`--------------------------'  `--------------------------'
   ),
  [_NAV] = LAYOUT(  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
@@ -111,7 +113,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       XXXXXXX, XXXXXXX, KC_HOME, KC_PGDN, KC_PGUP, KC_END,                      LALT(KC_LEFT), LALT(KC_DOWN), LALT(KC_UP), LALT(KC_RIGHT), XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LGUI,   LOWER, SFT_ENT,     KC_SPC,   RSE_TAB, KC_RALT 
+                                          KC_LGUI, LWR_TAB, SFT_ENT,    SFT_SPC, RSE_ENT, KC_RALT 
                                       //`--------------------------'  `--------------------------'
  )
 };
